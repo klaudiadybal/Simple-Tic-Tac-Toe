@@ -1,24 +1,24 @@
+import java.util.Arrays;
+
 public class Board {
     protected char [][] board = new char[3][3];
 
     public Board () {
-        for (int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
-                board[i][j] = ' ';
-            }
+        for (char[] chars : board) {
+            Arrays.fill(chars, ' ');
         }
     }
 
     public void showBoard() {
         System.out.println("---------");
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+        for (char[] chars : board) {
+            for (int j = 0; j < chars.length; j++) {
                 if (j == 0) {
-                    System.out.printf("| %s ", board[i][j]);
+                    System.out.printf("| %s ", chars[j]);
                 } else if (j == 2) {
-                    System.out.printf("%s |", board[i][j]);
+                    System.out.printf("%s |", chars[j]);
                 } else {
-                    System.out.printf("%s ", board[i][j]);
+                    System.out.printf("%s ", chars[j]);
                 }
             }
             System.out.println();

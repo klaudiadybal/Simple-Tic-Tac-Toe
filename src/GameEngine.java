@@ -9,91 +9,56 @@ public class GameEngine extends Board {
     }
 
     public String gameStatus () {
-        String returnGameStatus = null;
+        String returnGameStatus;
         if(!isFinished()) {
-            if (isImpossible()) {
-                returnGameStatus = "Impossible";
-            } else {
-                if ((findWinner('X').equals("X wins")) && (findWinner('O').equals("O wins"))) {
-                    returnGameStatus = "Draw";
-                } else {
-                returnGameStatus = findWinner('X');
-                if (returnGameStatus == "Draw") {
-                    returnGameStatus = findWinner('O');
-                }
-                if (returnGameStatus == "Draw") {
-                    returnGameStatus = "Game not finished";
-                }
+            returnGameStatus = findWinner('X');
+            if (returnGameStatus.equals("Draw")) {
+                returnGameStatus = findWinner('O');
             }
-        }
+            if (returnGameStatus.equals("Draw")) {
+                returnGameStatus = "Game not finished";
+            }
         } else {
-            if (isImpossible()) {
-                returnGameStatus = "Impossible";
-            } else {
-                returnGameStatus = findWinner('X');
-                if (returnGameStatus == "Draw") {
-                    returnGameStatus = findWinner('O');
-                }
-            }
+            returnGameStatus = findWinner('X').equals("Draw") ? findWinner('O') : findWinner('X');
         }
 
         return returnGameStatus;
     }
+
 
     public boolean isFinished() {
         boolean returnGameStatus = true;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == ' ') {
+        for (char[] chars : board) {
+            for (char i : chars) {
+                if (i == ' ') {
                     returnGameStatus = false;
+                    break;
                 }
             }
         }
         return returnGameStatus;
     }
-
-    public boolean isImpossible() {
-        boolean returnGameStatus = false;
-        int sumX = 0;
-        int sumO = 0;
-        for (int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
-                if(board[i][j] == 'X') {
-                    sumX++;
-                } else if (board[i][j] == 'O') {
-                    sumO++;
-                }
-            }
-        }
-
-        if (sumX > sumO + 1 || sumO > sumX + 1) {
-            returnGameStatus = true;
-
-        }
-        return returnGameStatus;
-    }
-
 
     public String findWinner (char symbol) {
 
         String returnGameStatus = "";
         String message = String.format("%c wins", symbol);
 
-        for (int i = 0; i < board.length; i++){
-            if(board[i][0] == symbol && board[i][1] == symbol && board [i][2] == symbol) {
-                returnGameStatus = message;
-                break;
-            } else if (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol) {
-                returnGameStatus = message;
-                break;
-            } else if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) {
-                returnGameStatus = message;
-                break;
-            } else if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol) {
-                returnGameStatus = message;
-                break;
-            } else {
-                returnGameStatus = "Draw";
+        if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) {
+            returnGameStatus = message;
+        } else if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol) {
+            returnGameStatus = message;
+        } else {
+            for (int i = 0; i < board.length; i++) {
+                if (board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol) {
+                    returnGameStatus = message;
+                    break;
+                } else if (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol) {
+                    returnGameStatus = message;
+                    break;
+                } else {
+                    returnGameStatus = "Draw";
+                }
             }
         }
 
@@ -101,8 +66,8 @@ public class GameEngine extends Board {
     }
 
     public void makeMove(char symbol){
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
         while (true) {
 
             try {
@@ -111,7 +76,7 @@ public class GameEngine extends Board {
 
             } catch (InputMismatchException e) {
                 System.out.println("You should enter numbers!");
-                scanner.nextLine(); // consumes invalid output
+                scanner.nextLine();
                 continue;
             }
 
