@@ -1,18 +1,18 @@
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board();
-        GameEngine gameEngine = new GameEngine(board);
-        gameEngine.showGrid();
+        GameEngine gameEngine = new GameEngine();
+        gameEngine.showBoard();
+        System.out.println("Enter coordinates to start: ");
         String gameStatus = gameEngine.gameStatus();
-        while (gameStatus == "Game not finished") {
+        while (gameStatus.equals("Game not finished")) {
             gameEngine.makeMove('X');
-            gameEngine.showGrid();
+            gameEngine.showBoard();
             gameStatus = gameEngine.gameStatus();
-            if (gameStatus != "Game not finished") {
+            if (!gameStatus.equals("Game not finished")) {
                 break;
             }
             gameEngine.makeMove('O');
-            gameEngine.showGrid();
+            gameEngine.showBoard();
             gameStatus = gameEngine.gameStatus();
         }
         System.out.println(gameStatus);

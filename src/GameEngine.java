@@ -1,33 +1,31 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class GameEngine {
+public class GameEngine extends Board {
     private static final Scanner scanner = new Scanner(System.in);
-    private Board gameGrid;
 
-
-    public GameEngine (Board gameGrid) {
-        this.gameGrid = gameGrid;
+    public GameEngine () {
+        super();
     }
 
     public String gameStatus () {
         String returnGameStatus = null;
         if(!isFinished()) {
-            if(isImpossible()) {
+            if (isImpossible()) {
                 returnGameStatus = "Impossible";
             } else {
                 if ((findWinner('X').equals("X wins")) && (findWinner('O').equals("O wins"))) {
                     returnGameStatus = "Draw";
                 } else {
-                    returnGameStatus = findWinner('X');
-                    if (returnGameStatus == "Draw") {
-                        returnGameStatus = findWinner( 'O');
-                    }
-                    if (returnGameStatus == "Draw") {
-                        returnGameStatus = "Game not finished";
-                    }
+                returnGameStatus = findWinner('X');
+                if (returnGameStatus == "Draw") {
+                    returnGameStatus = findWinner('O');
+                }
+                if (returnGameStatus == "Draw") {
+                    returnGameStatus = "Game not finished";
                 }
             }
+        }
         } else {
             if (isImpossible()) {
                 returnGameStatus = "Impossible";
@@ -44,9 +42,9 @@ public class GameEngine {
 
     public boolean isFinished() {
         boolean returnGameStatus = true;
-        for (int i = 0; i < gameGrid.board.length; i++) {
-            for (int j = 0; j < gameGrid.board[i].length; j++) {
-                if (gameGrid.board[i][j] == ' ') {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == ' ') {
                     returnGameStatus = false;
                 }
             }
@@ -58,11 +56,11 @@ public class GameEngine {
         boolean returnGameStatus = false;
         int sumX = 0;
         int sumO = 0;
-        for (int i = 0; i < gameGrid.board.length; i++) {
-            for(int j = 0; j < gameGrid.board[i].length; j++) {
-                if(gameGrid.board[i][j] == 'X') {
+        for (int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; j++) {
+                if(board[i][j] == 'X') {
                     sumX++;
-                } else if (gameGrid.board[i][j] == 'O') {
+                } else if (board[i][j] == 'O') {
                     sumO++;
                 }
             }
@@ -70,35 +68,33 @@ public class GameEngine {
 
         if (sumX > sumO + 1 || sumO > sumX + 1) {
             returnGameStatus = true;
-//        } else if ((findWinner(board, 'X').equals("X wins")) && (findWinner(board,'O').equals("O wins"))){
-//            returnGameStatus = true;
-        }
 
+        }
         return returnGameStatus;
     }
 
 
     public String findWinner (char symbol) {
-        String returnGameStatus = "";
 
-        if (gameGrid.board[0][0] == symbol && gameGrid.board[0][1] == symbol && gameGrid.board[0][2] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[1][0] == symbol && gameGrid.board[1][1] == symbol && gameGrid.board[1][2] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[2][0] == symbol && gameGrid.board[2][1] == symbol && gameGrid.board[2][2] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[0][0] == symbol && gameGrid.board[1][1] == symbol && gameGrid.board[2][2] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[0][2] == symbol && gameGrid.board[1][1] == symbol && gameGrid.board[2][0] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[0][0] == symbol && gameGrid.board[1][0] == symbol && gameGrid.board[2][0] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[0][1] == symbol && gameGrid.board[1][1] == symbol && gameGrid.board[2][1] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else if (gameGrid.board[0][2] == symbol && gameGrid.board[1][2] == symbol && gameGrid.board[2][2] == symbol) {
-            returnGameStatus = String.format("%c wins", symbol);
-        } else {
-            returnGameStatus = "Draw";
+        String returnGameStatus = "";
+        String message = String.format("%c wins", symbol);
+
+        for (int i = 0; i < board.length; i++){
+            if(board[i][0] == symbol && board[i][1] == symbol && board [i][2] == symbol) {
+                returnGameStatus = message;
+                break;
+            } else if (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol) {
+                returnGameStatus = message;
+                break;
+            } else if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) {
+                returnGameStatus = message;
+                break;
+            } else if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol) {
+                returnGameStatus = message;
+                break;
+            } else {
+                returnGameStatus = "Draw";
+            }
         }
 
         return returnGameStatus;
@@ -120,7 +116,7 @@ public class GameEngine {
             }
 
             try {
-                if (gameGrid.board[x - 1][y - 1] == 'X' || gameGrid.board[x - 1][y - 1] == 'O') {
+                if (board[x - 1][y - 1] == 'X' || board[x - 1][y - 1] == 'O') {
                     System.out.println("This cell is occupied! Choose another one!");
                 } else {
                     break;
@@ -128,28 +124,8 @@ public class GameEngine {
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Coordinates should be from 1 to 3!");
             }
-
-
         }
 
-        gameGrid.board[x - 1][y - 1] =  symbol;
-
-    }
-
-    public void showGrid() {
-        System.out.println("---------");
-        for (int i = 0; i < gameGrid.board.length; i++) {
-            for (int j = 0; j < gameGrid.board[i].length; j++) {
-                if (j == 0) {
-                    System.out.printf("| %s ", gameGrid.board[i][j]);
-                } else if (j == 2) {
-                    System.out.printf("%s |", gameGrid.board[i][j]);
-                } else {
-                    System.out.printf("%s ", gameGrid.board[i][j]);
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("---------");
+        board[x - 1][y - 1] =  symbol;
     }
 }

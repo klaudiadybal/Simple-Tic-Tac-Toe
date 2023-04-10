@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Board {
     protected char [][] board = new char[3][3];
 
